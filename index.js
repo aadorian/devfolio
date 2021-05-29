@@ -3,13 +3,14 @@ require("dotenv").config();
 const Discord = require("discord.js");
 const config = require("./config.json");
 const networks = require("@polkadot/networks");
-const { randomAsU8a } = require("@polkadot/util-crypto");
 const {
+  randomAsU8a,
   signatureVerify,
   mnemonicGenerate,
   mnemonicToMiniSecret,
   randomAsHex,
 } = require("@polkadot/util-crypto");
+const { Keyring } = require("@polkadot/keyring")
 const { stringToU8a, u8aToHex } = require("@polkadot/util");
 const { ApiPromise, WsProvider } = require("@polkadot/api");
 
@@ -151,48 +152,56 @@ client.on("message", async function (message) {
     //message.reply(`Chain block: #${header.number}`);
   }
   if (command === "validators") {
-    const validators = await Promise.all([
-      api.query.session.validators()
-    ]);
+    const validators = await Promise.all([api.query.session.validators()]);
     if (validators && validators.length > 0) {
       const validatorBalances = await Promise.all(
-        validators.map((authorityId) =>
-          api.query.system.account(authorityId)
-        )
+        validators.map((authorityId) => api.query.system.account(authorityId))
       );
       // Print out the authorityIds and balances of all validators
-     
-      let keys = Array.from(  validators.map((authorityId, index) => (
-        {
-        address: authorityId.toString(),
-        balance: validatorBalances[index].data.free.toHuman(),
-        nonce: validatorBalances[index].nonce.toHuman()
-      })));
-  
+
+      let keys = Array.from(
+        validators.map((authorityId, index) => ({
+          address: authorityId.toString(),
+          balance: validatorBalances[index].data.free.toHuman(),
+          nonce: validatorBalances[index].nonce.toHuman(),
+        }))
+      );
+
       const validatorsEmbed = new Discord.MessageEmbed()
-      .setColor(EMBED_COLOR_PRIMARY)
-      .setTitle( PROVIDER_NAME + " Validators " )
-      .setURL("https://wiki.polkadot.network/docs/en/learn-validator#docsNav")
-      .setAuthor(AUTHOR, IMG_POLKA_WHITE, LINK_AUTHOR)
-      .setDescription(
-        "Validators secure the Relay Chain by staking DOT, validating proofs from collators and participating in consensus with other validators. These participants will play a crucial role in adding new blocks to the Relay Chain and, by extension, to all parachains. This allows parties to complete cross-chain transactions via the Relay Chain."
-      )
-      .setThumbnail(IMG_POLKA)
-      .addFields(
-  
-        { name: 'Validators #', value: keys.length, inline: false },
-       // { name: 'Info', value: JSON.stringify(keys), inline: true },
-       //TODO: extend to list of validators from other networks
-       { name: 'Address', value: `${keys[0].address}` , inline: true },
-       { name: 'Balance', value: `${keys[0].balance}` , inline: true },
-       { name: 'Nonce', value: `${keys[0].nonce}` , inline: true }
-      )
-      .setImage(IMG_POLKA_WHITE)
-      .setTimestamp()
-      .setFooter("Network: " + PROVIDER_NAME, IMG_POLKA);
-    message.channel.send(validatorsEmbed);
-     
-     
+        .setColor(EMBED_COLOR_PRIMARY)
+        .setTitle(PROVIDER_NAME + " Validators ")
+        .setURL("https://wiki.polkadot.network/docs/en/learn-validator#docsNav")
+        .setAuthor(AUTHOR, IMG_POLKA_WHITE, LINK_AUTHOR)
+        .setDescription(
+          "Validators secure the Relay Chain by staking DOT, validating proofs from collators and participating in consensus with other validators. These participants will play a crucial role in adding new blocks to the Relay Chain and, by extension, to all parachains. This allows parties to complete cross-chain transactions via the Relay Chain."
+        )
+        .setThumbnail(IMG_POLKA)
+        .addFields(
+          { name: "Validators #", value: keys.length, inline: false },
+          // { name: 'Info', value: JSON.stringify(keys), inline: true },
+          //TODO: extend to list of validators from other networks
+          { name: "Address", value: `${keys[0].address}`, inline: true },
+          { name: "Balance", value: `${keys[0].balance}`, inline: true },
+          { name: "Nonce", value: `${keys[0].nonce}`, inline: true }
+        )
+        .setImage(IMG_POLKA_WHITE)
+        .setTimestamp()
+        .setFooter("Network: " + PROVIDER_NAME, IMG_POLKA);
+      message.channel.send(validatorsEmbed);
+    }
+  }
+  if (command === "testing") {
+    const mnemonic = mnemonicGenerate();
+    console.log(mnemonic)
+    const keyring = new Keyring({ type: 'sr25519', ss58Format: 2 });
+    const pair = keyring.addFromUri(
+      mnemonic,
+      { name: "first pair" },
+      "ed25519"
+    );
+    console.log(keyring.pairs.length, "pairs available");
+    console.log(pair.meta.name, "has address", pair.address);
+
   }
   if (command === "multibalance") {
     const Alice = "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY";
@@ -202,8 +211,6 @@ client.on("message", async function (message) {
     console.log(
       `Current balances for Alice and Bob are ${balances[0].data.free} and ${balances[1].data.free}`
     );
-    
-  }
   }
 });
 
