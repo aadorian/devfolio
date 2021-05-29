@@ -117,6 +117,41 @@ client.on("message", async function (message) {
     message.channel.send(accountEmbed);
 
   }
+  if (command === "blockchain"){
+    const [chain, nodeName, nodeVersion,now] = await Promise.all([
+      api.rpc.system.chain(),
+      api.rpc.system.name(),
+      api.rpc.system.version(),
+      api.query.timestamp.now()
+    ]);
+    const lastHeader = await api.rpc.chain.getHeader();
+    //console.log(`${lastHeader}`);
+    const blockChainEmbed = new Discord.MessageEmbed()
+        .setColor(EMBED_COLOR_PRIMARY)
+        .setTitle("Blockchain " + `${chain}`)
+        .setURL("https://wiki.polkadot.network/docs/en/learn-architecture")
+        .setAuthor(AUTHOR, IMG_POLKA_WHITE, LINK_AUTHOR)
+        .setDescription(
+          "The Relay Chain is the central chain of Polkadot. Westend is the latest test network for Polkadot. The tokens on this network are called Westies and they purposefully hold no economic value."
+        )
+        .setThumbnail(IMG_POLKA)
+        .addFields(
+          { name: "Chain: ", value: `${chain}` },
+          { name: "Node Name: ", value: `${nodeName}` },
+          { name: "Node Version: ", value: `${nodeVersion}` },
+          { name: "Last Block: ", value: `${lastHeader.number}` },
+          { name: "Parent Hash: ", value: `${lastHeader.parentHash}` },
+          { name: "Last Hash: ", value: `${lastHeader.hash}` },
+          { name: "stateRoot: ", value: `${lastHeader.stateRoot}` },
+          { name: "Last Block TimeStamp: ", value: `${now.toNumber()}` },
+        )
+        //.addField('Inline field title', 'Some value here', true)
+       // .setImage(IMG_POLKA_WHITE)
+        .setTimestamp()
+        .setFooter("Network: " + PROVIDER_NAME, IMG_POLKA);
+      message.channel.send(blockChainEmbed);
+      //message.reply(`Chain block: #${header.number}`);
+  }
 });
 
 client.login(config.BOT_TOKEN);
