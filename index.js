@@ -31,6 +31,8 @@ const EMBED_COLOR_SECONDARY = 0x545454;
 const PROVIDER = "wss://westend-rpc.polkadot.io";
 const PROVIDER_NAME = "WestEnd";
 const TOKEN_NAME = "WND";
+
+
 const client = new Discord.Client();
 
 const prefix = "!";
@@ -205,6 +207,7 @@ client.on("message", async function (message) {
     console.log(pair.meta.name, "has address", pair.address);
   }
   if (command === "encrypt") {
+    //TODO: refactor naming and startwith example (encriptar el mansaje enviado por el bot)
     const timeTaken = Date.now() - message.createdTimestamp;
     const secret = randomAsU8a();
     const messagePreEncryption = stringToU8a("MESSAGE");
@@ -218,6 +221,9 @@ client.on("message", async function (message) {
     );
 
     message.reply(`Latency ${timeTaken}ms.`);
+  }
+  if (command === testing){
+
   }
   if (command === "multibalance") {
     const Alice = "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY";
