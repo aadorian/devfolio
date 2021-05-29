@@ -10,7 +10,7 @@ const {
   mnemonicToMiniSecret,
   randomAsHex,
 } = require("@polkadot/util-crypto");
-const { Keyring } = require("@polkadot/keyring")
+const { Keyring } = require("@polkadot/keyring");
 const { stringToU8a, u8aToHex } = require("@polkadot/util");
 const { ApiPromise, WsProvider } = require("@polkadot/api");
 
@@ -190,10 +190,10 @@ client.on("message", async function (message) {
       message.channel.send(validatorsEmbed);
     }
   }
-  if (command === "testing") {
+  if (command === "signup") {
     const mnemonic = mnemonicGenerate();
-    console.log(mnemonic)
-    const keyring = new Keyring({ type: 'sr25519', ss58Format: 2 });
+    console.log(mnemonic);
+    const keyring = new Keyring({ type: "sr25519", ss58Format: 2 });
     const pair = keyring.addFromUri(
       mnemonic,
       { name: "first pair" },
@@ -201,7 +201,15 @@ client.on("message", async function (message) {
     );
     console.log(keyring.pairs.length, "pairs available");
     console.log(pair.meta.name, "has address", pair.address);
+  }
+  if (commnand === "sign") {
+    // create the message, actual signature and verify
+    const message = stringToU8a("this is our message");
+    const signature = alice.sign(message);
+    const isValid = alice.verify(message, signature);
 
+    // output the result
+    console.log(`${u8aToHex(signature)} is ${isValid ? "valid" : "invalid"}`);
   }
   if (command === "multibalance") {
     const Alice = "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY";
