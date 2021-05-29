@@ -202,7 +202,7 @@ client.on("message", async function (message) {
     console.log(keyring.pairs.length, "pairs available");
     console.log(pair.meta.name, "has address", pair.address);
   }
-  if (commnand === "sign") {
+  if (command === "sign") {
     // create the message, actual signature and verify
     const message = stringToU8a("this is our message");
     const signature = alice.sign(message);
