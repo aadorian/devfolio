@@ -171,7 +171,7 @@ client.on("message", async function (message) {
   
       const validatorsEmbed = new Discord.MessageEmbed()
       .setColor(EMBED_COLOR_PRIMARY)
-      .setTitle("Validators " )
+      .setTitle( PROVIDER_NAME + " Validators " )
       .setURL("https://wiki.polkadot.network/docs/en/learn-validator#docsNav")
       .setAuthor(AUTHOR, IMG_POLKA_WHITE, LINK_AUTHOR)
       .setDescription(
