@@ -75,8 +75,7 @@ client.on("message", async function (message) {
     });
     headerBlock();
   }
-  if (command === "accountbalance") {
-    //accounts
+  if (command === "account") {
 
     let {
       data: {
@@ -91,9 +90,9 @@ client.on("message", async function (message) {
       providers: providers,
     } = await api.query.system.account(process.env.ACCOUNT_ALICE);
    
-    const blockEmbed = new Discord.MessageEmbed()
+    const accountEmbed = new Discord.MessageEmbed()
       .setColor(EMBED_COLOR_PRIMARY)
-      .setTitle("Balance")
+      .setTitle("Account Balance")
       .setURL("https://wiki.polkadot.network/docs/en/learn-accounts")
       .setAuthor(AUTHOR, IMG_POLKA_WHITE, LINK_AUTHOR)
       .setDescription(
@@ -109,15 +108,14 @@ client.on("message", async function (message) {
         { name: "Fee frozen: ", value: `${feeFrozen} ` + TOKEN_NAME },
         { name: "Previous nonce: ", value: `${previousNonce} ` + TOKEN_NAME },
         { name: "Consumers: ", value: `${consumers} ` },
-        { name: "Providers: ", value: `${providers} ` }
+        { name: "Providers: ", value: `${providers} ` },
+        //{ name: "Sufficients: ", value: `${sufficients} ` }
       )
-
-      //.addField('Inline field title', 'Some value here', true)
-      .setImage(IMG_POLKA_WHITE)
+     // .setImage(IMG_POLKA_WHITE)
       .setTimestamp()
       .setFooter("Network: " + PROVIDER_NAME, IMG_POLKA);
-    message.channel.send(blockEmbed);
-    //message.reply(`Chain block: #${header.number}`);
+    message.channel.send(accountEmbed);
+
   }
 });
 
