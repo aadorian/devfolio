@@ -7,17 +7,23 @@ const { stringToU8a, u8aToHex } = require('@polkadot/util') ;
 const { ApiPromise, WsProvider } = require('@polkadot/api');
 //img 
 const AUTHOR = "@aleadorjan";
-const BLOCK = "https://i.imgur.com/R8ftZPS.png";
-const EMBED_COLOR_PRIMARY = 0x8444e4; 
+const IMG_POLKA = 'https://i.imgur.com/E1bgyRO.png';
+const IMG_POLKA_WHITE = 'https://i.imgur.com/XFV02Qh.png'
+const IMG_AUTHOR = 'https://i.imgur.com/wSTFkRM.png'
+
+const LINK_AUTHOR = 'https://discord.js.org'
+const EMBED_COLOR_PRIMARY = 0xE6007A; 
 const EMBED_COLOR_SECONDARY = 0x545454;
 //wss URL of Provider
 const PROVIDER = 'wss://westend-rpc.polkadot.io'
+const PROVIDER_NAME = 'WestEnd'
 const client = new Discord.Client();
 
 const prefix = "!";
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
+
 
 client.on("message", async function(message) {
 
@@ -36,13 +42,28 @@ client.on("message", async function(message) {
   }
   if (command === "block") {
     const headerBlock = await api.rpc.chain.subscribeNewHeads((header) => {
-      message.reply(`Chain block: #${header.number}`);
-        
+      const exampleEmbed = new Discord.MessageEmbed()
+        .setColor(EMBED_COLOR_PRIMARY)
+        .setTitle('Block')
+        .setURL('https://wiki.polkadot.network/docs/en/glossary#block')
+        .setAuthor(AUTHOR, IMG_POLKA_WHITE , LINK_AUTHOR)
+        .setDescription('A collection of data, such as transactions, that together indicates a state transition of the blockchain.')
+        .setThumbnail(IMG_POLKA)
+        .addFields(
+          { name: 'Chain block: #', value: `${header.number}` },
+          { name: 'Parent hash: #', value: `${header.parentHash}` },
+          { name: 'State root: #', value: `${header.stateRoot}` },
+          { name: 'Extrinsic root: #', value: `${header.stateRoot}` },
+        )
+        //.addField('Inline field title', 'Some value here', true)
+        .setImage(IMG_POLKA_WHITE)
+        .setTimestamp()
+        .setFooter('Network' + PROVIDER_NAME, IMG_POLKA);
+      message.channel.send(exampleEmbed);
+      //message.reply(`Chain block: #${header.number}`);
     });
     headerBlock()
   }
-
-
 });
 
 client.login(config.BOT_TOKEN);
