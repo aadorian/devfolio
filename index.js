@@ -4,6 +4,8 @@ const Discord = require("discord.js");
 const config = require("./config.json");
 const networks = require("@polkadot/networks");
 const {
+  naclDecrypt,
+  naclEncrypt,
   randomAsU8a,
   signatureVerify,
   mnemonicGenerate,
@@ -11,7 +13,7 @@ const {
   randomAsHex,
 } = require("@polkadot/util-crypto");
 const { Keyring } = require("@polkadot/keyring");
-const { stringToU8a, u8aToHex } = require("@polkadot/util");
+const { stringToU8a, u8aToHex, u8aToString } = require("@polkadot/util");
 const { ApiPromise, WsProvider } = require("@polkadot/api");
 
 //author
@@ -202,11 +204,31 @@ client.on("message", async function (message) {
     console.log(keyring.pairs.length, "pairs available");
     console.log(pair.meta.name, "has address", pair.address);
   }
-  if (command === "testing") {
-  
+  if (command === "encrypt") {
+    const timeTaken = Date.now() - message.createdTimestamp;
+    const secret = randomAsU8a();
+    const messagePreEncryption = stringToU8a("super secret message");
 
+    // Encrypt the message
+    const { encrypted, nonce } = naclEncrypt(messagePreEncryption, secret);
 
-   }
+    // Show contents of the encrypted message
+    console.log(`Encrypted message: ${JSON.stringify(encrypted, null, 2)}`);
+
+    // Decrypt the message
+    const messageDecrypted = naclDecrypt(encrypted, nonce, secret);
+
+    // Convert each Uint8Array to a string for comparison
+    const isMatch =
+      u8aToString(messagePreEncryption) === u8aToString(messageDecrypted);
+
+    // Verify that the decrypted message matches the original message
+    console.log(
+      `Does the decrypted message match the original message? ${isMatch}`
+    );
+
+    message.reply(`Latency ${timeTaken}ms.`);
+  }
   if (command === "multibalance") {
     const Alice = "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY";
     //secret Alice 0xe5be9a5092b81bca64be81d212e7f2f9eba183bb7a90954f7b76361f6edb5c0a
