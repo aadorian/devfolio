@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@polkadot/api": "^4.11.2",
     "discord.js": "^12.5.3"
   }
 }
