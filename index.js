@@ -207,24 +207,14 @@ client.on("message", async function (message) {
   if (command === "encrypt") {
     const timeTaken = Date.now() - message.createdTimestamp;
     const secret = randomAsU8a();
-    const messagePreEncryption = stringToU8a("super secret message");
-
-    // Encrypt the message
+    const messagePreEncryption = stringToU8a("MESSAGE");
     const { encrypted, nonce } = naclEncrypt(messagePreEncryption, secret);
-
-    // Show contents of the encrypted message
     console.log(`Encrypted message: ${JSON.stringify(encrypted, null, 2)}`);
-
-    // Decrypt the message
     const messageDecrypted = naclDecrypt(encrypted, nonce, secret);
-
-    // Convert each Uint8Array to a string for comparison
-    const isMatch =
+    const equals=
       u8aToString(messagePreEncryption) === u8aToString(messageDecrypted);
-
-    // Verify that the decrypted message matches the original message
     console.log(
-      `Does the decrypted message match the original message? ${isMatch}`
+      `Ok? ${equals}`
     );
 
     message.reply(`Latency ${timeTaken}ms.`);
