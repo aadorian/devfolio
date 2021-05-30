@@ -237,8 +237,7 @@ client.on("message", async function (message) {
    
   }
   if (command === "encrypt") {
-    //TODO: refactor naming and startwith example (encriptar el mansaje enviado por el bot)
-    const timeTaken = Date.now() - message.createdTimestamp;
+     const timeTaken = Date.now() - message.createdTimestamp;
     const secret = randomAsU8a();
     const messagePreEncryption = stringToU8a("MESSAGE");
     const { encrypted, nonce } = naclEncrypt(messagePreEncryption, secret);
@@ -285,18 +284,9 @@ client.on("message", async function (message) {
       .setImage(IMG_POLKA_WHITE)
       .setTimestamp()
       .setFooter("Network: " + PROVIDER_NAME, IMG_POLKA);
-    //message.channel.send(helpEmbed);
     message.author.send(helpEmbed);
   }
-  if (command === "multibalance") {
-    const Alice = "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY";
-    //secret Alice 0xe5be9a5092b81bca64be81d212e7f2f9eba183bb7a90954f7b76361f6edb5c0a
-    const Bob = "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty";
-    const balances = await api.query.system.account.multi([Alice, Bob]);
-    console.log(
-      `Current balances for Alice and Bob are ${balances[0].data.free} and ${balances[1].data.free}`
-    );
-  }
+ 
 });
 
 client.login(config.BOT_TOKEN);
