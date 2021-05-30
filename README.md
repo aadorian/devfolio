@@ -14,8 +14,6 @@
 This bot aims to use as an existing communication channel of one of the applications that many users use on a daily basis such as Discord. 
 
 
-
-
 # Use Cases 
 
 ##### UC1
@@ -67,14 +65,11 @@ https://discord.gg/YvAS832N
 | Account| 
 | -------- | 
 | ![](https://i.imgur.com/zeJDgyv.png)
- |
-
 
 # Potencial Impact 
 
 
 >Discord is the frequent communication platform between developers, where Polkadot uses it as the main means of communication in its ecosystem. This bot aims to have a first approach to the interaction with the Polkadot blockchain, creating an account, consulting its balance and obtaining relevant information from the blockchain.
-
 
 
 
