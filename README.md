@@ -7,7 +7,6 @@
 
 # PolkaDiscordBot
 
-[TOC]
 ## **Motivation**
 
 **[Polkadot]**
