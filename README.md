@@ -9,7 +9,7 @@
 
 ## **Motivation**
 
->Discord is the frequent communication platform between developers. Polkadot uses this platform in the ecosystem. This bot aims to have a first approach tinteraction with the Polkadot blockchain; creating an account, consulting its balance and obtaining relevant information.
+>Discord is the frequent communication platform between developers. Polkadot uses this platform in the ecosystem. This bot aims to have a first approach interaction with the Polkadot blockchain; creating an account, consulting its balance and obtaining relevant information.
 
 
 
@@ -24,7 +24,7 @@
 > As a **user** I want to **use Discord** so that I can **get relevant** information of the blockchain.
 
 
->Note: this bot is agnostic from any Polkadot compatible blockchain. In this PoC we use WestEnd.
+>Note: this bot is agnostic from any Polkadot compatible blockchain using Polkadot API. In this PoC we use WestEnd.
 
 
 # DevFolio
