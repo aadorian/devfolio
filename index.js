@@ -11,9 +11,11 @@ const {
   mnemonicToMiniSecret,
   randomAsHex,
 } = require("@polkadot/util-crypto");
+
 const { Keyring } = require("@polkadot/keyring");
 const { stringToU8a, u8aToHex, u8aToString } = require("@polkadot/util");
 const { ApiPromise, WsProvider } = require("@polkadot/api");
+
 const AUTHOR = "@aleadorjan";
 const IMG_POLKA = "https://i.imgur.com/E1bgyRO.png";
 const IMG_POLKA_WHITE = "https://i.imgur.com/XFV02Qh.png";
@@ -176,8 +178,6 @@ client.on("message", async function (message) {
     const mnemonic = mnemonicGenerate();
     const keyring = new Keyring({ type: "sr25519", ss58Format: 2 });
     const pair = keyring.addFromUri(mnemonic, { name: "first" }, "ed25519");
-    console.log(keyring);
-    console.log(pair);
     const createEmbed = new Discord.MessageEmbed()
       .setColor(EMBED_COLOR_PRIMARY)
       .setTitle("Account Creation")
