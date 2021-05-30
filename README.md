@@ -121,6 +121,7 @@ ACCOUNT_ALICE = 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY
 
 1. https://www.npmjs.com/package/@polkadot/api
 2. https://polkadot.network
+3. https://discordjs.guide
 
 <p align="center">
 <a href="https://polkadot.network/" target="_blank">
