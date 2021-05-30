@@ -23,9 +23,9 @@ const AUTHOR = "@aleadorjan";
 const IMG_POLKA = "https://i.imgur.com/E1bgyRO.png";
 const IMG_POLKA_WHITE = "https://i.imgur.com/XFV02Qh.png";
 const IMG_AUTHOR = "https://i.imgur.com/wSTFkRM.png";
-const URL_POLKADOT = "https://polkadot.network"
+const URL_POLKADOT = "https://polkadot.network";
 const LINK_AUTHOR = "https://discord.js.org";
-const BOT_NAME = "PolkaDiscordBot"
+const BOT_NAME = "PolkaDiscordBot";
 //colors
 const EMBED_COLOR_PRIMARY = 0xe6007a;
 const EMBED_COLOR_SECONDARY = 0x545454;
@@ -33,7 +33,6 @@ const EMBED_COLOR_SECONDARY = 0x545454;
 const PROVIDER = "wss://westend-rpc.polkadot.io";
 const PROVIDER_NAME = "WestEnd";
 const TOKEN_NAME = "WND";
-
 
 const client = new Discord.Client();
 
@@ -56,7 +55,7 @@ client.on("message", async function (message) {
     const timeTaken = Date.now() - message.createdTimestamp;
     message.reply(`Latency ${timeTaken}ms.`);
   }
-  if (command === "block") {
+  if (command === "blockinfo") {
     const headerBlock = await api.rpc.chain.subscribeNewHeads((header) => {
       const blockEmbed = new Discord.MessageEmbed()
         .setColor(EMBED_COLOR_PRIMARY)
@@ -130,7 +129,6 @@ client.on("message", async function (message) {
       api.query.timestamp.now(),
     ]);
     const lastHeader = await api.rpc.chain.getHeader();
-    //console.log(`${lastHeader}`);
     const blockChainEmbed = new Discord.MessageEmbed()
       .setColor(EMBED_COLOR_PRIMARY)
       .setTitle("Blockchain " + `${chain}`)
@@ -150,12 +148,9 @@ client.on("message", async function (message) {
         { name: "StateRoot: ", value: `${lastHeader.stateRoot}` },
         { name: "Last Block TimeStamp: ", value: `${now.toNumber()}` }
       )
-      //.addField('Inline field title', 'Some value here', true)
-      // .setImage(IMG_POLKA_WHITE)
       .setTimestamp()
       .setFooter("Network: " + PROVIDER_NAME, IMG_POLKA);
     message.channel.send(blockChainEmbed);
-    //message.reply(`Chain block: #${header.number}`);
   }
   if (command === "validators") {
     const validators = await Promise.all([api.query.session.validators()]);
@@ -198,16 +193,48 @@ client.on("message", async function (message) {
   }
   if (command === "createaccount") {
     const mnemonic = mnemonicGenerate();
-    console.log(mnemonic);
-  
     const keyring = new Keyring({ type: "sr25519", ss58Format: 2 });
     const pair = keyring.addFromUri(
       mnemonic,
-      { name: "first pair" },
+      { name: "first" },
       "ed25519"
     );
-    console.log(keyring.pairs.length, "pairs available");
-    console.log(pair.meta.name, "has address", pair.address);
+    console.log(keyring)
+    console.log(pair)
+    const createEmbed = new Discord.MessageEmbed()
+      .setColor(EMBED_COLOR_PRIMARY)
+      .setTitle("Account Creation")
+      .setURL("https://support.polkadot.network/support/solutions/articles/65000098878-how-to-create-a-dot-account")
+      .setAuthor(AUTHOR, IMG_POLKA_WHITE, LINK_AUTHOR)
+      .setDescription(
+        "You can create a DOT account in any wallet that supports Polkadot: Polkadot.js , Subkey, Parity Signer & " + BOT_NAME
+      )
+      .setThumbnail(IMG_POLKA)
+      .addFields({
+        name: "Your mnemonic phrase. Don't share this!! ",
+        value: `${mnemonic}`,
+        inline: true,
+      },
+      {
+        name: "Your Address",
+        value: `${pair.address}`,
+        inline: true,
+      }, 
+      {
+        name: "Locked",
+        value: `${pair.isLocked}`,
+        inline: true,
+      },
+      {
+        name: "Type ",
+        value: `${pair.type}`,
+        inline: true,
+      })
+      .setImage(IMG_POLKA_WHITE)
+      .setTimestamp()
+      .setFooter("Network: " + PROVIDER_NAME, IMG_POLKA);
+    message.author.send(createEmbed);
+   
   }
   if (command === "encrypt") {
     //TODO: refactor naming and startwith example (encriptar el mansaje enviado por el bot)
@@ -220,29 +247,46 @@ client.on("message", async function (message) {
     const equals =
       u8aToString(messagePreEncryption) === u8aToString(messageDecrypted);
     console.log(`Ok? ${equals}`);
-
     message.reply(`Latency ${timeTaken}ms.`);
   }
   if (command === "helpbot") {
-  
     const helpEmbed = new Discord.MessageEmbed()
-    .setColor(EMBED_COLOR_PRIMARY)
-    .setTitle("help command")
-    .setURL("https://polkadot.network")
-    .setAuthor(AUTHOR, IMG_POLKA_WHITE, LINK_AUTHOR)
-    .setDescription(
-      'Polkadot development is on track to deliver the most robust platform for security, scalability and innovation.'
-    )
-    .setThumbnail(IMG_POLKA)
-    .addFields(
-      { name: "!block ", value: `list block information `, inline: true },
-
-    )
-    .setImage(IMG_POLKA_WHITE)
-    .setTimestamp()
-    .setFooter("Network: " + PROVIDER_NAME, IMG_POLKA);
-  //message.channel.send(helpEmbed);
-   message.author.send(helpEmbed);
+      .setColor(EMBED_COLOR_PRIMARY)
+      .setTitle("Help")
+      .setURL("https://polkadot.network")
+      .setAuthor(AUTHOR, IMG_POLKA_WHITE, LINK_AUTHOR)
+      .setDescription(
+        "Polkadot development is on track to deliver the most robust platform for security, scalability and innovation."
+      )
+      .setThumbnail(IMG_POLKA)
+      .addFields(
+        {
+          name: "!account ",
+          value: ` displays all the account balance information `,
+          inline: true,
+        },
+        {
+          name: "!blockchain ",
+          value: `displays all the blockchain name, node version, last block, etc.`,
+          inline: true,
+        },
+        {
+          name: "!blockinfo ",
+          value: `displays the actual block information of the blockchain`,
+          inline: true,
+        },
+        { name: "!helpbot ", value: `help command`, inline: true },
+        {
+          name: "!validators ",
+          value: `displays the list of actual validators of the blockchain`,
+          inline: true,
+        }
+      )
+      .setImage(IMG_POLKA_WHITE)
+      .setTimestamp()
+      .setFooter("Network: " + PROVIDER_NAME, IMG_POLKA);
+    //message.channel.send(helpEmbed);
+    message.author.send(helpEmbed);
   }
   if (command === "multibalance") {
     const Alice = "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY";
