@@ -72,12 +72,10 @@ client.on("message", async function (message) {
           { name: "State root: #", value: `${header.stateRoot}` },
           { name: "Extrinsic root: #", value: `${header.stateRoot}` }
         )
-        //.addField('Inline field title', 'Some value here', true)
         .setImage(IMG_POLKA_WHITE)
         .setTimestamp()
         .setFooter("Network: " + PROVIDER_NAME, IMG_POLKA);
       message.channel.send(blockEmbed);
-      //message.reply(`Chain block: #${header.number}`);
     });
     headerBlock();
   }
@@ -194,50 +192,50 @@ client.on("message", async function (message) {
   if (command === "createaccount") {
     const mnemonic = mnemonicGenerate();
     const keyring = new Keyring({ type: "sr25519", ss58Format: 2 });
-    const pair = keyring.addFromUri(
-      mnemonic,
-      { name: "first" },
-      "ed25519"
-    );
-    console.log(keyring)
-    console.log(pair)
+    const pair = keyring.addFromUri(mnemonic, { name: "first" }, "ed25519");
+    console.log(keyring);
+    console.log(pair);
     const createEmbed = new Discord.MessageEmbed()
       .setColor(EMBED_COLOR_PRIMARY)
       .setTitle("Account Creation")
-      .setURL("https://support.polkadot.network/support/solutions/articles/65000098878-how-to-create-a-dot-account")
+      .setURL(
+        "https://support.polkadot.network/support/solutions/articles/65000098878-how-to-create-a-dot-account"
+      )
       .setAuthor(AUTHOR, IMG_POLKA_WHITE, LINK_AUTHOR)
       .setDescription(
-        "You can create a DOT account in any wallet that supports Polkadot: Polkadot.js , Subkey, Parity Signer & " + BOT_NAME
+        "You can create a DOT account in any wallet that supports Polkadot: Polkadot.js , Subkey, Parity Signer & " +
+          BOT_NAME
       )
       .setThumbnail(IMG_POLKA)
-      .addFields({
-        name: "Your mnemonic phrase. Don't share this!! ",
-        value: `${mnemonic}`,
-        inline: true,
-      },
-      {
-        name: "Your Address",
-        value: `${pair.address}`,
-        inline: true,
-      }, 
-      {
-        name: "Locked",
-        value: `${pair.isLocked}`,
-        inline: true,
-      },
-      {
-        name: "Type ",
-        value: `${pair.type}`,
-        inline: true,
-      })
+      .addFields(
+        {
+          name: "Your mnemonic phrase. Don't share this!! ",
+          value: `${mnemonic}`,
+          inline: true,
+        },
+        {
+          name: "Your Address",
+          value: `${pair.address}`,
+          inline: true,
+        },
+        {
+          name: "Locked",
+          value: `${pair.isLocked}`,
+          inline: true,
+        },
+        {
+          name: "Type ",
+          value: `${pair.type}`,
+          inline: true,
+        }
+      )
       .setImage(IMG_POLKA_WHITE)
       .setTimestamp()
       .setFooter("Network: " + PROVIDER_NAME, IMG_POLKA);
     message.author.send(createEmbed);
-   
   }
   if (command === "encrypt") {
-     const timeTaken = Date.now() - message.createdTimestamp;
+    const timeTaken = Date.now() - message.createdTimestamp;
     const secret = randomAsU8a();
     const messagePreEncryption = stringToU8a("MESSAGE");
     const { encrypted, nonce } = naclEncrypt(messagePreEncryption, secret);
@@ -286,7 +284,6 @@ client.on("message", async function (message) {
       .setFooter("Network: " + PROVIDER_NAME, IMG_POLKA);
     message.author.send(helpEmbed);
   }
- 
 });
 
 client.login(config.BOT_TOKEN);
