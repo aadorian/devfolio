@@ -75,6 +75,9 @@ https://discord.gg/YvAS832N
 
 # Build & Run 
 
+rename:
+.env.example to .env
+.config.json.example to .config.json.example
 ```
 npm install
 npm start
