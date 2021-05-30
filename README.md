@@ -9,7 +9,7 @@
 
 ## **Motivation**
 
->Discord is the frequent communication platform between developers, where Polkadot uses it as the main means of communication in its ecosystem. This bot aims to have a first approach to the interaction with the Polkadot blockchain, creating an account, consulting its balance and obtaining relevant information from the blockchain.
+>Discord is the frequent communication platform between developers. Polkadot uses this platform in the ecosystem. This bot aims to have a first approach tinteraction with the Polkadot blockchain; creating an account, consulting its balance and obtaining relevant information.
 
 
 
