@@ -1,9 +1,7 @@
 require("dotenv").config();
-
 const Discord = require("discord.js");
 const config = require("./config.json");
 const networks = require("@polkadot/networks");
-
 const {
   naclDecrypt,
   naclEncrypt,
@@ -16,24 +14,18 @@ const {
 const { Keyring } = require("@polkadot/keyring");
 const { stringToU8a, u8aToHex, u8aToString } = require("@polkadot/util");
 const { ApiPromise, WsProvider } = require("@polkadot/api");
-
-//author
 const AUTHOR = "@aleadorjan";
-//img URL
 const IMG_POLKA = "https://i.imgur.com/E1bgyRO.png";
 const IMG_POLKA_WHITE = "https://i.imgur.com/XFV02Qh.png";
 const IMG_AUTHOR = "https://i.imgur.com/wSTFkRM.png";
 const URL_POLKADOT = "https://polkadot.network";
 const LINK_AUTHOR = "https://discord.js.org";
 const BOT_NAME = "PolkaDiscordBot";
-//colors
 const EMBED_COLOR_PRIMARY = 0xe6007a;
 const EMBED_COLOR_SECONDARY = 0x545454;
-//wss URL of Provider
 const PROVIDER = "wss://westend-rpc.polkadot.io";
 const PROVIDER_NAME = "WestEnd";
 const TOKEN_NAME = "WND";
-
 const client = new Discord.Client();
 
 const prefix = "!";
@@ -44,9 +36,7 @@ client.on("ready", () => {
 client.on("message", async function (message) {
   const provider = new WsProvider(PROVIDER);
   const api = await ApiPromise.create({ provider });
-
   if (!message.content.startsWith(prefix)) return;
-
   const commandBody = message.content.slice(prefix.length);
   const args = commandBody.split(" ");
   const command = args.shift().toLowerCase();
@@ -112,9 +102,7 @@ client.on("message", async function (message) {
         { name: "Previous nonce: ", value: `${previousNonce} ` + TOKEN_NAME },
         { name: "Consumers: ", value: `${consumers} ` },
         { name: "Providers: ", value: `${providers} ` }
-        //{ name: "Sufficients: ", value: `${sufficients} ` }
       )
-      // .setImage(IMG_POLKA_WHITE)
       .setTimestamp()
       .setFooter("Network: " + PROVIDER_NAME, IMG_POLKA);
     message.channel.send(accountEmbed);
@@ -156,8 +144,6 @@ client.on("message", async function (message) {
       const validatorBalances = await Promise.all(
         validators.map((authorityId) => api.query.system.account(authorityId))
       );
-      // Print out the authorityIds and balances of all validators
-
       let keys = Array.from(
         validators.map((authorityId, index) => ({
           address: authorityId.toString(),
@@ -165,7 +151,6 @@ client.on("message", async function (message) {
           nonce: validatorBalances[index].nonce.toHuman(),
         }))
       );
-
       const validatorsEmbed = new Discord.MessageEmbed()
         .setColor(EMBED_COLOR_PRIMARY)
         .setTitle(PROVIDER_NAME + " Validators ")
@@ -176,12 +161,10 @@ client.on("message", async function (message) {
         )
         .setThumbnail(IMG_POLKA)
         .addFields(
-          { name: "Validators #", value: keys.length, inline: false },
-          // { name: 'Info', value: JSON.stringify(keys), inline: true },
-          //TODO: extend to list of validators from other networks
           { name: "Address", value: `${keys[0].address}`, inline: true },
           { name: "Balance", value: `${keys[0].balance}`, inline: true },
-          { name: "Nonce", value: `${keys[0].nonce}`, inline: true }
+          { name: "Nonce", value: `${keys[0].nonce}`, inline: true },
+          { name: "Validators #", value: keys.length, inline: false }
         )
         .setImage(IMG_POLKA_WHITE)
         .setTimestamp()
@@ -285,5 +268,4 @@ client.on("message", async function (message) {
     message.author.send(helpEmbed);
   }
 });
-
 client.login(config.BOT_TOKEN);
