@@ -113,7 +113,6 @@ npm start
 ```
 
 
-*CheckList Submition:*
 
 
 ## Configuration file (.env)
