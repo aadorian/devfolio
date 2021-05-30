@@ -86,7 +86,7 @@ npm install
 npm start
 
 ```
-[![Netlify Status](https://api.netlify.com/api/v1/badges/322d5815-fb6a-4edf-bed1-1e13db5e77dd/deploy-status)](https://app.netlify.com/sites/tender-raman-985fdb/deploys)
+
 
 # Dependencies
 
