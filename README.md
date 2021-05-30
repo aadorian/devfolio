@@ -34,6 +34,7 @@ https://devfolio.co/polkadot-buildathon/dashboard
 
 # Video 
 
+https://youtu.be/DKuLpk8A1TU
 
 # Online Bot Access
 
