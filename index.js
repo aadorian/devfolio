@@ -3,6 +3,7 @@ require("dotenv").config();
 const Discord = require("discord.js");
 const config = require("./config.json");
 const networks = require("@polkadot/networks");
+
 const {
   naclDecrypt,
   naclEncrypt,
@@ -22,8 +23,9 @@ const AUTHOR = "@aleadorjan";
 const IMG_POLKA = "https://i.imgur.com/E1bgyRO.png";
 const IMG_POLKA_WHITE = "https://i.imgur.com/XFV02Qh.png";
 const IMG_AUTHOR = "https://i.imgur.com/wSTFkRM.png";
-
+const URL_POLKADOT = "https://polkadot.network"
 const LINK_AUTHOR = "https://discord.js.org";
+const BOT_NAME = "PolkaDiscordBot"
 //colors
 const EMBED_COLOR_PRIMARY = 0xe6007a;
 const EMBED_COLOR_SECONDARY = 0x545454;
@@ -194,9 +196,10 @@ client.on("message", async function (message) {
       message.channel.send(validatorsEmbed);
     }
   }
-  if (command === "signup") {
+  if (command === "createaccount") {
     const mnemonic = mnemonicGenerate();
     console.log(mnemonic);
+  
     const keyring = new Keyring({ type: "sr25519", ss58Format: 2 });
     const pair = keyring.addFromUri(
       mnemonic,
@@ -214,16 +217,32 @@ client.on("message", async function (message) {
     const { encrypted, nonce } = naclEncrypt(messagePreEncryption, secret);
     console.log(`Encrypted message: ${JSON.stringify(encrypted, null, 2)}`);
     const messageDecrypted = naclDecrypt(encrypted, nonce, secret);
-    const equals=
+    const equals =
       u8aToString(messagePreEncryption) === u8aToString(messageDecrypted);
-    console.log(
-      `Ok? ${equals}`
-    );
+    console.log(`Ok? ${equals}`);
 
     message.reply(`Latency ${timeTaken}ms.`);
   }
-  if (command === testing){
+  if (command === "helpbot") {
+  
+    const helpEmbed = new Discord.MessageEmbed()
+    .setColor(EMBED_COLOR_PRIMARY)
+    .setTitle("help command")
+    .setURL("https://polkadot.network")
+    .setAuthor(AUTHOR, IMG_POLKA_WHITE, LINK_AUTHOR)
+    .setDescription(
+      'Polkadot development is on track to deliver the most robust platform for security, scalability and innovation.'
+    )
+    .setThumbnail(IMG_POLKA)
+    .addFields(
+      { name: "!block ", value: `list block information `, inline: true },
 
+    )
+    .setImage(IMG_POLKA_WHITE)
+    .setTimestamp()
+    .setFooter("Network: " + PROVIDER_NAME, IMG_POLKA);
+  //message.channel.send(helpEmbed);
+   message.author.send(helpEmbed);
   }
   if (command === "multibalance") {
     const Alice = "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY";
